@@ -3,12 +3,13 @@
 import { EmailAPI } from "/assets/js/emailAPI.js"
 
 window.onload = (e) => {
-    document.getElementById('get-all-emails-button')?.addEventListener('click', OnGetAllEmailsButtonClick);
-    document.getElementById('clear-all-emails-button')?.addEventListener('click', OnClearAllEmailsButtonClick);
+    document.getElementById('get-all-emails-button')?.addEventListener('click', LoadTable);
+    document.getElementById('clear-all-emails-button')?.addEventListener('click', ClearTable);
     document.getElementById('home-button')?.addEventListener('click', () => { window.location.href = '/index.html' });
+    ClearTable();
 }
 
-async function OnGetAllEmailsButtonClick() {
+async function LoadTable() {
     const emails = await EmailAPI.GetAllEmails();
     if(!emails) {
         console.error('Could not load emails.')
@@ -77,8 +78,38 @@ async function OnGetAllEmailsButtonClick() {
 
     */
 
-    // First create a header row
-    let data = `
+    ClearTable();
+
+    let table_body = table.getElementsByTagName('tbody')?.[0];
+    if(!table_body) {
+        console.error('Could not find <tbody> in email table!');
+        return;
+    }
+
+    // Add each row manually
+    emails.forEach(e => {
+        const row = document.createElement('tr');
+        row.addEventListener('dblclick', () => { DeleteEmail(e.id) });
+        row.innerHTML = `
+                <td>${e.id}</td>
+                <td>${e.subject}</td>
+                <td>${e.body}</td>
+                <td>${e.sender}</td>
+                <td>${e.receiver}</td>
+                <td>${e.timestamp}</td>
+        `
+        table_body.appendChild(row)
+    });
+
+}
+
+function ClearTable() {
+    const table = document.getElementById('email-table');
+    if(!table) {
+        console.error('Could not find email table.')
+        return;
+    }
+    table.innerHTML = `
     <thead>
         <tr>
             <th>ID</th>
@@ -89,33 +120,15 @@ async function OnGetAllEmailsButtonClick() {
             <th>Timestamp</th>
         </tr>
     </thead>
+    <tbody>
+
+    </tbody>
     `;
-
-    data += '<tbody>'
-    // Add each row manually
-    emails.forEach(e => {
-        data = data + `
-            <tr>
-                <td>${e.id}</td>
-                <td>${e.subject}</td>
-                <td>${e.body}</td>
-                <td>${e.sender}</td>
-                <td>${e.receiver}</td>
-                <td>${e.timestamp}</td>
-            </tr>
-        `
-    });
-    data += '</tbody>'
-
-    // Append new HTML into <table>
-    table.innerHTML = data;
 }
 
-function OnClearAllEmailsButtonClick() {
-    const table = document.getElementById('email-table');
-    if(!table) {
-        console.error('Could not find email table.')
-        return;
-    }
-    table.innerHTML = '';
-} 
+export function DeleteEmail(emailId) {
+    alert(`Deleting email with ID = ${emailId}`);
+    EmailAPI.DeleteEmail(emailId);
+    ClearTable();
+    LoadTable(); // Reload table
+}
