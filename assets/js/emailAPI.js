@@ -17,6 +17,28 @@ class _EmailAPI {
         return response.json();
     }
 
+    // Returns true if successful and false if failed
+    async CreateNewEmail(email) {
+        const URL = `http://127.0.0.1:5207/api/Email`;
+        const response = await fetch(URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(email)
+        });
+
+        if(!response.ok) {
+            console.error('Could not create new email.')
+            if(response.status === 400) { /* Bad Request */
+                alert(await response.text())
+            }
+            return false;
+        }
+
+        return true;
+    }
+
 }
 
 export const EmailAPI = new _EmailAPI();
