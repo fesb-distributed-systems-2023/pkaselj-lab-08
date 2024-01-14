@@ -10,7 +10,7 @@ window.onload = (e) => {
 
 function OnClearButtonClick() {
     document.getElementById('sender').value = '';
-    document.getElementById('receiver').value = '';
+    document.getElementById('receivers').value = '';
     document.getElementById('subject').value = '';
     document.getElementById('body').value = '';
 }
@@ -25,12 +25,13 @@ async function OnSendEmailButonClick() {
     }
     email.sender = sender.value;
 
-    const receiver = document.getElementById('receiver');
-    if(!receiver) {
+    const receivers = document.getElementById('receivers');
+    if(!receivers) {
         alert('Receiver field is empty!')
         return;
     }
-    email.receiver = receiver.value;
+
+    email.receivers = receivers.value.split(';');
 
     const subject = document.getElementById('subject');
     if(!subject) {

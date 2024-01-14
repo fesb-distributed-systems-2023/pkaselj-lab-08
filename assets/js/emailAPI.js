@@ -1,4 +1,4 @@
-const Base_URL = 'http://localhost:5000'
+const Base_URL = 'http://localhost:5197'
 
 class _EmailAPI { 
 
@@ -42,7 +42,7 @@ class _EmailAPI {
     }
 
     async DeleteEmail(emailId) {
-        const URL = `http://127.0.0.1:5207/api/Email/${emailId}`;
+        const URL = `${Base_URL}/api/Email/${emailId}`;
         const response = await fetch(URL, {
             method: "DELETE",
             headers: {

@@ -90,12 +90,15 @@ async function LoadTable() {
     emails.forEach(e => {
         const row = document.createElement('tr');
         row.addEventListener('dblclick', () => { DeleteEmail(e.id) });
+
+        const lstReceivers = e.receivers.join('<br>')
+
         row.innerHTML = `
                 <td>${e.id}</td>
                 <td>${e.subject}</td>
                 <td>${e.body}</td>
                 <td>${e.sender}</td>
-                <td>${e.receiver}</td>
+                <td>${lstReceivers}</td>
                 <td>${e.timestamp}</td>
         `
         table_body.appendChild(row)
