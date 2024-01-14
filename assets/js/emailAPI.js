@@ -41,6 +41,23 @@ class _EmailAPI {
         return true;
     }
 
+    async DeleteEmail(emailId) {
+        const URL = `http://127.0.0.1:5207/api/Email/${emailId}`;
+        const response = await fetch(URL, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if(!response.ok) {
+            console.error(`Could not delete email with id = ${emailId}.`)
+            if(response.status === 400) { /* Bad Request */
+                alert(await response.text())
+            }
+        }
+    }
+
 }
 
 export const EmailAPI = new _EmailAPI();
