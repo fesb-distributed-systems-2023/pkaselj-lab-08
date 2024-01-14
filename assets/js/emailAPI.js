@@ -1,7 +1,9 @@
-class _EmailAPI {
+const Base_URL = 'http://localhost:5000'
+
+class _EmailAPI { 
 
     async GetAllEmails() {
-        const URL = `http://127.0.0.1:5207/api/Email`;
+        const URL = `${Base_URL}/api/Email`;
         const response = await fetch(URL, {
             method: "GET",
             headers: {
@@ -19,7 +21,7 @@ class _EmailAPI {
 
     // Returns true if successful and false if failed
     async CreateNewEmail(email) {
-        const URL = `http://127.0.0.1:5207/api/Email`;
+        const URL = `${Base_URL}/api/Email`;
         const response = await fetch(URL, {
             method: "POST",
             headers: {
